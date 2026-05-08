@@ -31,3 +31,4 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: bind-confs
+  namespace: bind
