@@ -1,0 +1,33 @@
+apiVersion: v1
+data:
+  example.com: |
+    $TTL    604800
+    @       IN      SOA     example.com. root.example.com. (
+                                  1         ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      ns.example.com.
+    ns      IN      A       192.168.1.10
+    www     IN      A       192.168.1.20
+  named.conf.default-zones: "// prime the server with knowledge of the root servers\nzone
+    \".\" {\n\ttype hint;\n\tfile \"/usr/share/dns/root.hints\";\n};\n\n// be authoritative
+    for the localhost forward and reverse zones, and for\n// broadcast zones as per
+    RFC 1912\n\nzone \"localhost\" {\n\ttype master;\n\tfile \"/etc/bind/db.local\";\n};\n\nzone
+    \"127.in-addr.arpa\" {\n\ttype master;\n\tfile \"/etc/bind/db.127\";\n};\n\nzone
+    \"0.in-addr.arpa\" {\n\ttype master;\n\tfile \"/etc/bind/db.0\";\n};\n\nzone \"255.in-addr.arpa\"
+    {\n\ttype master;\n\tfile \"/etc/bind/db.255\";\n};\n\nzone \"example.com\" {\n\ttype
+    master;\n\tfile \"/etc/bind/example.com\";\n};\n"
+  named.conf.options: |
+    options {
+            directory "/var/cache/bind";
+            dnssec-validation auto;
+            listen-on-v6 { any; };
+            allow-query { any; };
+    };
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: bind-confs

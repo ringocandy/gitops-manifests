@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bind-deployment
+  namespace: bind
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dns-bind
+  template:
+    metadata:
+      labels:
+        app: dns-bind
+    spec:
+      containers:
+        - image: ubuntu/bind9
+          name: ubuntu-bind9
+          ports:
+            - containerPort: 53
+              protocol: UDP
+            - containerPort: 53
+              protocol: TCP
+          volumeMounts:
+          - name: bindconfs
+            mountPath: /etc/bind/named.conf.options
+            subPath: named.conf.options
+          - name: bindconfs
+            mountPath: /etc/bind/named.conf.default-zones
+            subPath: named.conf.default-zones
+          - name: bindconfs
+            mountPath: /etc/bind/example.com
+            subPath: example.com
+      volumes:
+      - name: bindconfs
+        configMap:
+          name: bind-confs
