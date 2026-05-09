@@ -1,1 +1,3 @@
-
+- ArgoCDでMetalLBとBINDコンテナを展開するためのManifestです
+- App of Apps構成になっているため、root-appを展開することでMetalLBとBINDを同時に展開できます
+- 詳細はこちら https://note.com/ringocandy/n/n17272a8757b4
